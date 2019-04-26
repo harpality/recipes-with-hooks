@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Recipe from "./components/Recipe";
+import "./App.scss";
 
 const App = () => {
   const [recipes, setRecipes] = useState([]);
@@ -15,6 +16,7 @@ const App = () => {
     );
     const data = await response.json();
     setRecipes(data.hits);
+    console.log(data.hits);
   };
 
   useEffect(() => {
@@ -28,24 +30,36 @@ const App = () => {
   const getSearch = event => {
     event.preventDefault();
     setQuery(search);
+    setSearch("");
   };
 
   return (
     <div className="App">
+      <h1 className="main-title">Find Your Meal</h1>
       <form onSubmit={getSearch} className="search-form">
-        <input className="search-bar" type="text" value={search} onChange={updateSearch} />
-        <button className="search" type="submit">
+        <input
+          className="search-bar"
+          type="text"
+          value={search}
+          onChange={updateSearch}
+          placeholder="Enter any food item here"
+        />
+        <button className="search-button" type="submit">
           Search
         </button>
       </form>
-      {recipes.map(recipe => (
-        <Recipe
-          key={recipe.recipe.label}
-          title={recipe.recipe.label}
-          calories={recipe.recipe.calories}
-          image={recipe.recipe.image}
-        />
-      ))}
+      <div className="recipes">
+        {recipes.map(recipe => (
+          <Recipe
+            key={recipe.recipe.label}
+            title={recipe.recipe.label}
+            calories={recipe.recipe.calories}
+            image={recipe.recipe.image}
+            ingredients={recipe.recipe.ingredients}
+            makes={recipe.recipe.yield}
+          />
+        ))}
+      </div>
     </div>
   );
 };
